@@ -2,6 +2,7 @@ package Interfaz;
 
 import Clases.Movimiento_Flappy;
 import Clases.Movimiento_Tubos;
+import Clases.Movimiento_monedas;
 import java.awt.Color;
 import java.awt.Point;
 import javax.swing.JLabel;
@@ -20,6 +21,7 @@ public class juego extends javax.swing.JFrame {
     public static JLabel jLabel2;
     public static JLabel jLabel3;
     public static JLabel jLabel4;
+    public static JLabel jmonedas;
     private final JPanel jPanel1;
     public static JLabel jPuntaje;
     public PanelImage jSuelo;
@@ -30,9 +32,10 @@ public class juego extends javax.swing.JFrame {
     public static PanelImage panelImage1;
     private Movimiento_Flappy mvnt_flappy;
     private Movimiento_Tubos mvnt_tubos;
+    private Movimiento_monedas mvnt_mon;
     private boolean empezar = false;
     private puntaje puntaje;
-    private final Login login;
+    private final login login;
     private JPanel panel1;
     private JPanel panel2;
     public String nombre;
@@ -54,10 +57,11 @@ public class juego extends javax.swing.JFrame {
         jTubo_abajo1 = new javax.swing.JLabel();
         jTubo_arriba2 = new javax.swing.JLabel();
         jTubo_abajo2 = new javax.swing.JLabel();
+        jmonedas= new javax.swing.JLabel();
         initComponents();
         this.setLocationRelativeTo(null);
         ocularObjetos(false);
-        login = new Login();
+        login = new login();
         mostrarLogin();
         EventosExternos();
         this.setTitle("FLAPPY BIRD");
@@ -73,7 +77,7 @@ public class juego extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        panelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/MAPA3.jpg"))); 
+        panelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/MAPA.jpg"))); 
         panelImage1.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -130,6 +134,10 @@ public class juego extends javax.swing.JFrame {
         jTubo_abajo2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Tubo_2.png"))); 
         panelImage1.add(jTubo_abajo2);
         jTubo_abajo2.setBounds(290, 280, 52, 320);
+        
+       jmonedas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/moneda.png")));
+        panelImage1.add(jmonedas);
+        jmonedas.setBounds(50, -100, 42,310);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -207,6 +215,7 @@ public class juego extends javax.swing.JFrame {
         mvnt_flappy = new Movimiento_Flappy(this);
         mvnt_tubos.start();
         mvnt_flappy.start();
+        mvnt_mon.start();
         empezar = true;
         jFlappy.requestFocus();
         this.setTitle("FLAPPY BIRD - " + nombre);
@@ -221,18 +230,21 @@ public class juego extends javax.swing.JFrame {
         if (loclz_Flappy.x > (loclz_Tubo1.x - 32) && loclz_Flappy.x < ((loclz_Tubo1.x - 32) + 82) && loclz_Flappy.y < (loclz_Tubo1.y + 318)) {
             sonido.choque();
             this.mvnt_tubos.stop();
+            this.mvnt_mon.stop();
             this.mvnt_flappy.setSaltar(false);
             empezar = false;
             sonido.caida();
         } else if (loclz_Flappy.x > (loclz_Tubo2.x - 32) && loclz_Flappy.x < ((loclz_Tubo2.x - 32) + 82) && loclz_Flappy.y < (loclz_Tubo2.y + 318)) {
             sonido.choque();
             this.mvnt_tubos.stop();
+            this.mvnt_mon.stop();
             this.mvnt_flappy.setSaltar(false);
             empezar = false;
             sonido.caida();
         } else if (loclz_Flappy.x > (loclz_Tubo3.x - 32) && loclz_Flappy.x < ((loclz_Tubo3.x - 32) + 82) && loclz_Flappy.y > (loclz_Tubo3.y - 22)) {
             sonido.choque();
             this.mvnt_tubos.stop();
+            this.mvnt_mon.stop();
             this.mvnt_flappy.setSaltar(false);
             empezar = false;
             sonido.caida();
@@ -252,6 +264,7 @@ public class juego extends javax.swing.JFrame {
         jTubo_arriba1.setVisible(accion);
         jTubo_arriba2.setVisible(accion);
         jPuntaje.setVisible(accion);
+        jmonedas.setVisible(accion);
     }
 
     public synchronized void ValidarChoque() {
@@ -260,13 +273,14 @@ public class juego extends javax.swing.JFrame {
             if (sonido.terminochoque) {
                 sonido.choque();
             }
-            GamerOver gamerover = new GamerOver(this, true);
+            Gameover gamerover = new Gameover(this, true);
             try {
                 Thread hilo = new Thread() {
                     @Override
                     public void run() {
                         mvnt_tubos.stop();
-                        Movimiento_Flappy.detenethilo = true;
+                        mvnt_mon.stop();
+                        Movimiento_Flappy.detenerhilo = true;
                         stop();
                     }
                 };
