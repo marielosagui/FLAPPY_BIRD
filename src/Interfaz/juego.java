@@ -22,6 +22,7 @@ public class juego extends javax.swing.JFrame {
     public static JLabel jLabel3;
     public static JLabel jLabel4;
     public static JLabel jmonedas;
+    public static JLabel monedas2;
     private final JPanel jPanel1;
     public static JLabel jPuntaje;
     public PanelImage jSuelo;
@@ -58,6 +59,7 @@ public class juego extends javax.swing.JFrame {
         jTubo_arriba2 = new javax.swing.JLabel();
         jTubo_abajo2 = new javax.swing.JLabel();
         jmonedas= new javax.swing.JLabel();
+        monedas2= new javax.swing.JLabel();
         initComponents();
         this.setLocationRelativeTo(null);
         ocularObjetos(false);
@@ -135,10 +137,14 @@ public class juego extends javax.swing.JFrame {
         panelImage1.add(jTubo_abajo2);
         jTubo_abajo2.setBounds(290, 280, 52, 320);
         
-       jmonedas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/moneda.png")));
+        jmonedas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/moneda.png")));
         panelImage1.add(jmonedas);
-        jmonedas.setBounds(50, -100, 42,310);
-
+        jmonedas.setBounds(40, -90,32,300);
+        
+        monedas2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/moneda2.png")));
+        panelImage1.add(monedas2);
+        monedas2.setBounds(270,-120,32,300);
+        
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -212,6 +218,7 @@ public class juego extends javax.swing.JFrame {
 
     public void Empezar() {
         mvnt_tubos = new Movimiento_Tubos();
+        mvnt_mon = new Movimiento_monedas();
         mvnt_flappy = new Movimiento_Flappy(this);
         mvnt_tubos.start();
         mvnt_flappy.start();
@@ -265,6 +272,7 @@ public class juego extends javax.swing.JFrame {
         jTubo_arriba2.setVisible(accion);
         jPuntaje.setVisible(accion);
         jmonedas.setVisible(accion);
+        monedas2.setVisible(accion);
     }
 
     public synchronized void ValidarChoque() {
